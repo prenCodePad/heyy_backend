@@ -1,4 +1,4 @@
-import 'package:firebase_backend/src/models/notification_response.dart';
+import 'package:heyy_backend/src/models/notification_response.dart';
 
 abstract class NotificationRepositiory {
   const NotificationRepositiory();

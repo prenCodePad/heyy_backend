@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_backend/src/config/dio_setup.dart';
-import 'package:firebase_backend/src/models/notification_response.dart';
-import 'package:firebase_backend/src/notifications/notification_repo.dart';
+import 'package:heyy_backend/src/config/dio_setup.dart';
+import 'package:heyy_backend/src/models/notification_response.dart';
+import 'package:heyy_backend/src/notifications/notification_repo.dart';
 
 class NotificationRepositoryImpl extends NotificationRepositiory {
   const NotificationRepositoryImpl();

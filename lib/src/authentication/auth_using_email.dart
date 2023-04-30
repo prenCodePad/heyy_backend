@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_backend/src/models/email_signup_response.dart';
+import 'package:heyy_backend/src/models/email_signup_response.dart';
 
 class AuthUsingEmail {
   static Future<EmailSignUpResponse> signUp(String email, String password) async {
