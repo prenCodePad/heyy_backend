@@ -1,27 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthUsingPhone {
-  static Future<String?> login(String phoneNumber, {int? timeoutInSeconds}) async {
+  static Future<void> login(String phoneNumber,
+      {int? timeoutInSeconds,
+      void Function(String, int?)? codeSent,
+      void Function(String)? codeAutoRetrievalTimeout}) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    bool verificationStatus = true;
-    String verificationId = '';
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await auth.signInWithCredential(credential);
       },
-      verificationFailed: (FirebaseAuthException e) {
-        verificationStatus = true;
-      },
-      codeSent: (String id, int? resendToken) {
-        verificationId = id;
-      },
-      codeAutoRetrievalTimeout: (String id) {
-        verificationId = id;
-      },
+      verificationFailed: (FirebaseAuthException e) {},
+      codeSent: codeSent ?? (String id, int? resendToken) {},
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout ?? (String id) {},
       timeout: Duration(seconds: timeoutInSeconds ?? 60),
     );
-    return verificationStatus ? verificationId : null;
   }
 
   static Future<bool> verify(String verificationId, String smsCode) async {
