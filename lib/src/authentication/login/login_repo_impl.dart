@@ -23,4 +23,23 @@ class LoginRepoImpl extends LoginRepo {
   Future<void> deleteUser(String id) async {
     await firestore.collection('users').doc(id).delete();
   }
+
+  @override
+  Future<List<Map<String, dynamic>>> searchUser(String searchPhone) async {
+    return (await firestore.collection('users').get())
+        .docChanges
+        .where((e) {
+          var data = e.doc.data() ?? {};
+          return data['phone'].toString().trim().contains(searchPhone);
+        })
+        .map((e) => e.doc.data()!)
+        .toList();
+  }
+
+  @override
+  Future<Map<String, dynamic>> getUserWithPhone(String phone) async {
+    List<DocumentChange<Map<String, dynamic>>> docs =
+        (await firestore.collection('users').where('phone', isEqualTo: phone).get()).docChanges;
+    return docs.isEmpty ? {} : docs.first.doc.data() ?? {};
+  }
 }
