@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:heyy_backend/heyy_backend.dart';
 import 'package:heyy_backend/src/repo/chat_repo/chat_repo.dart';
 
 class ChatRepoApi implements ChatRepo {
@@ -13,7 +14,12 @@ class ChatRepoApi implements ChatRepo {
 
   @override
   Future<void> addConversation(String id, Map<String, dynamic> data) async {
-    await instance.collection('users').doc(id).collection('conversations').doc(data['id']).set(data);
+    await instance
+        .collection('users')
+        .doc(id)
+        .collection('conversations')
+        .doc(Common.getChatId(id, data['id']))
+        .set(data);
   }
 
   @override
@@ -24,5 +30,15 @@ class ChatRepoApi implements ChatRepo {
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getStreamedConversations(String id) {
     return instance.collection('users').doc(id).collection('conversations').orderBy('lastMessageTime').snapshots();
+  }
+
+  @override
+  Future<void> sendMessage(String chatId, Map<String, dynamic> data) async {
+    await instance.collection('chats').doc(chatId).collection('messages').doc(data['id']).set(data);
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getStreamedMessages(String id) {
+    return instance.collection('chats').doc(id).collection('messages').orderBy('time').snapshots();
   }
 }
