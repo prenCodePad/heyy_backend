@@ -6,7 +6,12 @@ class ChatRepoApi implements ChatRepo {
   var instance = FirebaseFirestore.instance;
   @override
   Future<List<Map<String, dynamic>>> getConversations(String id) async {
-    return (await instance.collection('users').doc(id).collection('conversations').orderBy('lastMessageTime').get())
+    return (await instance
+            .collection('users')
+            .doc(id)
+            .collection('conversations')
+            .orderBy('lastMessageTime', descending: true)
+            .get())
         .docChanges
         .map((e) => e.doc.data() ?? {})
         .toList();
@@ -29,7 +34,12 @@ class ChatRepoApi implements ChatRepo {
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getStreamedConversations(String id) {
-    return instance.collection('users').doc(id).collection('conversations').orderBy('lastMessageTime').snapshots();
+    return instance
+        .collection('users')
+        .doc(id)
+        .collection('conversations')
+        .orderBy('lastMessageTime', descending: true)
+        .snapshots();
   }
 
   @override
@@ -39,6 +49,6 @@ class ChatRepoApi implements ChatRepo {
 
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getStreamedMessages(String id) {
-    return instance.collection('chats').doc(id).collection('messages').orderBy('time').snapshots();
+    return instance.collection('chats').doc(id).collection('messages').orderBy('time', descending: true).snapshots();
   }
 }
